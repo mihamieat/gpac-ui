@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 
@@ -13,7 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${GeistSans.className} antialiased dark:bg-gray-950`}
+    >
       <body className="flex">
         {/* Sidebar stays here */}
         <Sidebar />
