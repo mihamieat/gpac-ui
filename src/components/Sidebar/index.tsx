@@ -26,7 +26,7 @@ export default function Sidebar() {
               <div className="w-5">
                 <OverviewIcon />
               </div>
-              Overview
+              <p>Overview</p>
             </div>
           </Link>
           <Link
@@ -37,7 +37,7 @@ export default function Sidebar() {
               <div className="w-5">
                 <NotificationIcon />
               </div>
-              Notifications
+              <p>Notifications</p>
             </div>
           </Link>
           <Link
@@ -48,7 +48,7 @@ export default function Sidebar() {
               <div className="w-5">
                 <SettingsIcon />
               </div>
-              Settings
+              <p>Settings</p>
             </div>
           </Link>
         </nav>
