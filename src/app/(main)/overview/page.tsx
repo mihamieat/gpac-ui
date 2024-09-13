@@ -1,6 +1,6 @@
-import { Card } from "@/components/Card";
-import { SparkAreaChart } from "@/components/SparkChart";
-import { ProgressCircle } from "@/components/ProgressCircle";
+import { Card } from "@/components/tremor/Card";
+import { SparkAreaChart } from "@/components/tremor/SparkChart";
+import { ProgressCircle } from "@/components/tremor/ProgressCircle";
 
 const chartdata = [
   {

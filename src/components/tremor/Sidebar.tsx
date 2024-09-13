@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Card } from "@/components/Card";
+import { Card } from "@/components/tremor/Card";
 import HomeIcon from "@/lib/icons/home";
 import OverviewIcon from "@/lib/icons/overview";
 import NotificationIcon from "@/lib/icons/notifications";
