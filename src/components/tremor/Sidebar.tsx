@@ -12,7 +12,7 @@ export default function Sidebar() {
         <nav className="flex flex-col p-5 ml-20">
           <Link className="mb-4 p-2 rounded hover:bg-violet-100" href="/">
             <div className="flex">
-              <div className="w-5">
+              <div className="w-5 mx-3">
                 <HomeIcon />
               </div>
               Home
@@ -23,7 +23,7 @@ export default function Sidebar() {
             href="/overview"
           >
             <div className="flex">
-              <div className="w-5">
+              <div className="w-5 mx-3">
                 <OverviewIcon />
               </div>
               <p>Overview</p>
@@ -34,7 +34,7 @@ export default function Sidebar() {
             href="/notifications"
           >
             <div className="flex">
-              <div className="w-5">
+              <div className="w-5 mx-3">
                 <NotificationIcon />
               </div>
               <p>Notifications</p>
@@ -45,7 +45,7 @@ export default function Sidebar() {
             href="/settings"
           >
             <div className="flex">
-              <div className="w-5">
+              <div className="w-5 mx-3">
                 <SettingsIcon />
               </div>
               <p>Settings</p>
