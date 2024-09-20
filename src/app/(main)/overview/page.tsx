@@ -1,4 +1,5 @@
 import OverviewCard from "@/components/OverviewCard";
+import Link from "next/link";
 import { chartData } from "@/data/dummydata";
 
 export default function Notifications() {
@@ -10,12 +11,14 @@ export default function Notifications() {
         </h1>
         <div className="grid grid-cols-3 justify-center gap-4">
           {chartData.map((overview, index) => (
-            <OverviewCard
-              key={index}
-              device={overview.device}
-              chartdata={overview.chartdata}
-              donutChartdata={overview.donutChartdata}
-            />
+            <Link href="/details">
+              <OverviewCard
+                key={index}
+                device={overview.device}
+                chartdata={overview.chartdata}
+                donutChartdata={overview.donutChartdata}
+              />
+            </Link>
           ))}
         </div>
       </div>
