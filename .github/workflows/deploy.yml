@@ -42,6 +42,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_API_USERNAME=${{ secrets.API_USER }}
+            NEXT_PUBLIC_API_URL=${{ secrets.API_URL }}
+            NEXT_PUBLIC_API_PASSWORD=${{ secrets.API_PASSWORD }}
 
       - name: Install Ansible
         run: sudo apt update && sudo apt install -y ansible
