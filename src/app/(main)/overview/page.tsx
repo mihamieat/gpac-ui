@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import OverviewCard from "@/components/OverviewCard";
+import OverviewDrawer from "@/components/OverviewDrawer";
 import {
   fetchCustomHostnameList,
   fetchOverviewData,
@@ -62,24 +63,36 @@ const Overview = () => {
   }, []);
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+    <main>
+      <div className="flex-col">
+        <h1 className="p-8 font-mono fixed bottom-0 left-0 flex h-48 w-full items-end justify-center lg:static lg:size-auto lg:bg-none">
+          Overview
+        </h1>
+        <div className="flex flex-row">
+          <div className="flex flex-wrap gap-4">
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-red-500">{error}</p>}
 
-      {Object.entries(overviewData).map(([hostname, data]) => (
-        <OverviewCard
-          key={hostname}
-          device={hostname}
-          chartdata={
-            data.gpu_data?.map((item: any) => ({
-              time: item.timestamp,
-              Percent: item.percentage,
-            })) || []
-          }
-          donutChartdata={data.percentage?.percentage || 0}
-        />
-      ))}
-    </div>
+            {Object.entries(overviewData).map(([hostname, data]) => (
+              <OverviewCard
+                key={hostname}
+                device={hostname}
+                chartdata={
+                  data.gpu_data?.map((item: any) => ({
+                    time: item.timestamp,
+                    Percent: item.percentage,
+                  })) || []
+                }
+                donutChartdata={data.percentage?.percentage || 0}
+              />
+            ))}
+          </div>
+          <div className="px-5">
+            <OverviewDrawer />
+          </div>
+        </div>
+      </div>
+    </main>
   );
 };
 
