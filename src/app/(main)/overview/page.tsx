@@ -79,7 +79,9 @@ const Overview = () => {
 
         const newOverviewMap = { ...overviewData };
         results.forEach(({ hostname, data }) => {
-          if (data) newOverviewMap[hostname] = data;
+          if (data) {
+            newOverviewMap[hostname] = data;
+          }
         });
 
         setOverviewData(newOverviewMap);
