@@ -1,48 +1,52 @@
 import { credentials } from "@/opt/credentials";
 
-const fetchFullHostnameList = async () => {
-  const endpoint = "overview/hostname-list";
+const apiRequest = async (
+  endpoint: string,
+  method: string,
+  options: RequestInit = {},
+) => {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`;
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Basic ${credentials}`,
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
       },
-    );
+      ...options,
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    return response;
+  } catch (error) {
+    console.error(`Error on ${method} ${endpoint}:`, error);
+    throw error;
+  }
+};
+
+const fetchFullHostnameList = async () => {
+  try {
+    const response = await apiRequest("overview/hostname-list", "GET");
     const data = await response.json();
 
     // Ensure 'hostnames' is an array
     return Array.isArray(data.hostnames) ? data.hostnames : [];
   } catch (error) {
-    console.error("Error fetching custom hostnames:", error);
+    console.error("Error fetching full hostname list:", error);
     return [];
   }
 };
 
 const addHostname = async (hostname: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/overview/hostname/custom?hostname=${hostname}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          "Content-Type": "application/json",
-        },
-      },
+    const response = await apiRequest(
+      `overview/hostname/custom?hostname=${hostname}`,
+      "POST",
     );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     return hostname;
   } catch (error) {
     console.error(`Error adding hostname ${hostname}:`, error);
@@ -52,20 +56,10 @@ const addHostname = async (hostname: string) => {
 
 const removeHostname = async (hostname: string) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/overview/hostname/custom/${hostname}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-        },
-      },
+    const response = await apiRequest(
+      `overview/hostname/custom/${hostname}`,
+      "DELETE",
     );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
     return hostname;
   } catch (error) {
     console.error(`Error removing hostname ${hostname}:`, error);
@@ -74,21 +68,8 @@ const removeHostname = async (hostname: string) => {
 };
 
 const fetchCustomHostnameList = async () => {
-  const endpoint = "overview/hostname/custom";
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    const response = await apiRequest("overview/hostname/custom", "GET");
     const data = await response.json();
     return data.hostnames;
   } catch (error) {
@@ -98,27 +79,15 @@ const fetchCustomHostnameList = async () => {
 };
 
 const fetchOverviewData = async (hostname: string) => {
-  const endpoint = "overview";
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}?hostname=${hostname}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Basic ${credentials}`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    const response = await apiRequest(`overview?hostname=${hostname}`, "GET");
     return await response.json();
   } catch (error) {
     console.error("Error fetching overview data", error);
     throw error;
   }
 };
+
 export {
   addHostname,
   fetchFullHostnameList,
