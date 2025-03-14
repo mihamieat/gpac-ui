@@ -13,21 +13,15 @@ const Overview = () => {
   const [error, setError] = useState<string | null>(null);
   const [overviewData, setOverviewData] = useState<Record<string, any>>({});
 
-  // Fetch hostnames and their overview data
+  // Fetch initial hostnames and their overview data
   useEffect(() => {
-    let isCancelled = false;
     const fetchData = async () => {
       setLoading(true);
       try {
-        // Fetch the list of hostnames
         const hostnameList = await fetchCustomHostnameList();
-        if (!isCancelled) {
-          setHostnames(hostnameList);
-        }
         setHostnames(hostnameList);
 
         if (hostnameList.length > 0) {
-          // Fetch overview data for all hostnames
           const results = await Promise.all(
             hostnameList.map(async (hostname: string) => {
               try {
@@ -38,12 +32,11 @@ const Overview = () => {
                   `Error fetching overview data for ${hostname}:`,
                   err,
                 );
-                return { hostname, data: null }; // Handle failed fetch
+                return { hostname, data: null };
               }
             }),
           );
 
-          // Convert results into an object for easy access
           const overviewMap: Record<string, any> = {};
           results.forEach(({ hostname, data }) => {
             if (data) overviewMap[hostname] = data;
@@ -62,6 +55,40 @@ const Overview = () => {
     fetchData();
   }, []);
 
+  // Update overviewData when hostnames change
+  useEffect(() => {
+    const fetchNewData = async () => {
+      const newHostnames = hostnames.filter(
+        (hostname) => !overviewData[hostname],
+      );
+      if (newHostnames.length > 0) {
+        const results = await Promise.all(
+          newHostnames.map(async (hostname: string) => {
+            try {
+              const data = await fetchOverviewData(hostname);
+              return { hostname, data };
+            } catch (err) {
+              console.error(
+                `Error fetching overview data for ${hostname}:`,
+                err,
+              );
+              return { hostname, data: null };
+            }
+          }),
+        );
+
+        const newOverviewMap = { ...overviewData };
+        results.forEach(({ hostname, data }) => {
+          if (data) newOverviewMap[hostname] = data;
+        });
+
+        setOverviewData(newOverviewMap);
+      }
+    };
+
+    fetchNewData();
+  }, [hostnames]);
+
   return (
     <main>
       <div className="flex-col">
@@ -73,22 +100,26 @@ const Overview = () => {
             {loading && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
 
-            {Object.entries(overviewData).map(([hostname, data]) => (
-              <OverviewCard
-                key={hostname}
-                device={hostname}
-                chartdata={
-                  data.gpu_data?.map((item: any) => ({
-                    time: item.timestamp,
-                    Percent: item.percentage,
-                  })) || []
-                }
-                donutChartdata={data.percentage?.percentage || 0}
-              />
-            ))}
+            {Object.entries(overviewData).map(
+              ([hostname, data]) =>
+                hostnames.includes(hostname) && (
+                  <OverviewCard
+                    key={hostname}
+                    device={hostname}
+                    chartdata={
+                      data.gpu_data?.map((item: any) => ({
+                        time: item.timestamp,
+                        Percent: item.percentage,
+                      })) || []
+                    }
+                    donutChartdata={data.percentage?.percentage || 0}
+                  />
+                ),
+            )}
           </div>
           <div className="px-5">
-            <OverviewDrawer />
+            {/* Pass setHostnames to OverviewDrawer */}
+            <OverviewDrawer hostnames={hostnames} setHostnames={setHostnames} />
           </div>
         </div>
       </div>
