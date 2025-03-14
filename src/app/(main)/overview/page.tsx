@@ -13,35 +13,37 @@ const Overview = () => {
   const [error, setError] = useState<string | null>(null);
   const [overviewData, setOverviewData] = useState<Record<string, any>>({});
 
+  // Helper function to fetch data for a list of hostnames
+  const fetchDataForHostnames = async (hostnamesList: string[]) => {
+    const results = await Promise.all(
+      hostnamesList.map(async (hostname: string) => {
+        try {
+          const data = await fetchOverviewData(hostname);
+          return { hostname, data };
+        } catch (err) {
+          console.error(`Error fetching overview data for ${hostname}:`, err);
+          return { hostname, data: null };
+        }
+      }),
+    );
+
+    const overviewMap: Record<string, any> = {};
+    results.forEach(({ hostname, data }) => {
+      if (data) overviewMap[hostname] = data;
+    });
+    return overviewMap;
+  };
+
   // Fetch initial hostnames and their overview data
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       setLoading(true);
       try {
         const hostnameList = await fetchCustomHostnameList();
         setHostnames(hostnameList);
 
         if (hostnameList.length > 0) {
-          const results = await Promise.all(
-            hostnameList.map(async (hostname: string) => {
-              try {
-                const data = await fetchOverviewData(hostname);
-                return { hostname, data };
-              } catch (err) {
-                console.error(
-                  `Error fetching overview data for ${hostname}:`,
-                  err,
-                );
-                return { hostname, data: null };
-              }
-            }),
-          );
-
-          const overviewMap: Record<string, any> = {};
-          results.forEach(({ hostname, data }) => {
-            if (data) overviewMap[hostname] = data;
-          });
-
+          const overviewMap = await fetchDataForHostnames(hostnameList);
           setOverviewData(overviewMap);
         }
       } catch (err) {
@@ -52,7 +54,7 @@ const Overview = () => {
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, []);
 
   // Update overviewData when hostnames change
@@ -62,29 +64,8 @@ const Overview = () => {
         (hostname) => !overviewData[hostname],
       );
       if (newHostnames.length > 0) {
-        const results = await Promise.all(
-          newHostnames.map(async (hostname: string) => {
-            try {
-              const data = await fetchOverviewData(hostname);
-              return { hostname, data };
-            } catch (err) {
-              console.error(
-                `Error fetching overview data for ${hostname}:`,
-                err,
-              );
-              return { hostname, data: null };
-            }
-          }),
-        );
-
-        const newOverviewMap = { ...overviewData };
-        results.forEach(({ hostname, data }) => {
-          if (data) {
-            newOverviewMap[hostname] = data;
-          }
-        });
-
-        setOverviewData(newOverviewMap);
+        const newData = await fetchDataForHostnames(newHostnames);
+        setOverviewData((prev) => ({ ...prev, ...newData }));
       }
     };
 
