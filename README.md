@@ -1,53 +1,81 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+
+# G-Pac UI
+
+G-Pac UI is a web-based user interface designed to visualize servers GPU performance and analytic data and interact with [G-Pac API](https://github.com/mihamieat/gpac-api). G-Pac UI belongs to the G-Pac project.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Before setting up the project, ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (latest LTS version recommended)
+- npm (comes with Node.js)
+
+### Install Dependencies
+
+To install the required dependencies, run the following command:
+
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Build the Project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To generate the production-ready build, use:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```sh
+npm run build
+```
 
-## Learn More
+### Start the Application
 
-To learn more about Next.js, take a look at the following resources:
+To start the application in production mode, run:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Development
 
-## Deploy on Vercel
+### Run the Development Server
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For local development, start the server in watch mode:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```sh
+npm run dev
+```
 
-## Github action configuration
+This will launch the application at [http://localhost:3000](http://localhost:3000).
 
-Make sure to add the following values to your Github action variables:
-| key | value |
-| ------------------ | ------------------------ |
-| REMOTE_HOST | host ip target to deploy |
-| REMOTE_USER | user of target server |
-| SSH_PRIVATE_KEY | generated private key |
-| SSH_PUBLIC_KEY | associated public key |
-| DOCKERHUB_USERNAME | docker hub username |
-| DOCKERHUB_TOKEN | docker hub token |
-| API_USER | API username |
-| API_PASSWORD | API password |
-| API_URL | API URL |
+## Contribution Guidelines
+
+We welcome contributions to improve G-Pac UI. To contribute:
+
+1. Fork the repository.
+2. Create a new branch for your feature or fix.
+3. Commit your changes with clear messages.
+4. Submit a pull request for review.
+
+## GitHub Actions Configuration
+
+To ensure seamless CI/CD integration, set the following variables in your GitHub Actions configuration:
+
+| Key                  | Description                       |
+| -------------------- | --------------------------------- |
+| `REMOTE_HOST`        | Target server IP for deployment   |
+| `REMOTE_USER`        | SSH user for the target server    |
+| `SSH_PRIVATE_KEY`    | Private SSH key for deployment    |
+| `SSH_PUBLIC_KEY`     | Public SSH key for authentication |
+| `DOCKERHUB_USERNAME` | Docker Hub username               |
+| `DOCKERHUB_TOKEN`    | Docker Hub access token           |
+| `API_USER`           | API authentication username       |
+| `API_PASSWORD`       | API authentication password       |
+| `API_URL`            | API endpoint URL                  |
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
