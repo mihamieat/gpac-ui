@@ -1,4 +1,5 @@
 import { Card } from "@/components/tremor/Card";
+import { Divider } from "@/components/tremor/Divider";
 import { SparkAreaChart } from "@/components/tremor/SparkChart";
 import { ProgressCircle } from "@/components/tremor/ProgressCircle";
 import React from "react";
@@ -20,17 +21,18 @@ const OverviewCard: React.FC<OverviewCardProps> = ({
   donutChartdata,
 }) => {
   return (
-    <Card className="w-80 h-60 flex flex-col justify-center items-center">
+    <Card className="w-80 h-65 flex flex-col justify-center items-center">
       <div className="mb-4">
         <p className="text-center font-mono text-gray-700 dark:text-gray-300">
           <b>{device}</b>
         </p>
       </div>
+      <Divider />
       <div className="flex justify-center items-center">
         <SparkAreaChart
           data={chartdata}
           categories={["Percent"]}
-          index={"time"}
+          index={"timestamp"}
           colors={["violet"]}
           className="sm:h-10 sm:w-36"
         />
