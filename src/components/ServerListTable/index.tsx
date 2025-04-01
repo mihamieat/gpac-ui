@@ -112,10 +112,10 @@ const ServerListTable: React.FC<{
           </TableHead>
           <TableBody>
             {fullHostnames.length > 0 ? (
-              fullHostnames.map((hostname, index) => {
+              fullHostnames.map((hostname) => {
                 const isInCustomList = hostnames.includes(hostname);
                 return (
-                  <TableRow key={index}>
+                  <TableRow key={hostname}>
                     <TableCell>{hostname}</TableCell>
                     <TableCell>
                       {isInCustomList ? (
